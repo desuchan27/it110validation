@@ -11,9 +11,38 @@ export default function SignUpForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
+
+    if (username.length < 1) {
+      setError("Please enter a username.");
+      return;
+    }
+    if (name.length < 1) {
+      setError("Please enter your name.");
+      return;
+    }
+    if (email.length < 1) {
+      setError("Please enter your email.");
+      return;
+    }
+    if (!email.includes("@")) {
+      setError("Invalid email address.");
+      return;
+    }
+    if (password.length < 1) {
+      setError("Please enter a password.");
+      return;
+    }
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    // If all validation checks pass, clear any previous error message and proceed with form submission.
+    setError("");
 
     const user = await fetch("/api/user", {
       method: "POST",
@@ -28,43 +57,23 @@ export default function SignUpForm() {
     if (user.ok) {
       router.push("/signin");
     } else {
-      if (username.length < 1) {
-        alert("enter username");
-      }
-      if (name.length < 1) {
-        alert("enter name");
-      }
-      if (email.length < 1) {
-        alert("enter email");
-      }
-      if (password.length < 1) {
-        alert("enter password");
-      }
-      if (password.length < 8) {
-        alert("password must be more than 8 characters");
-      }
-      if (!email.includes("@")) {
-        alert("invalid email");
-      }
-      if (username.length > 20) {
-        alert("username must be less than 20 characters");
-      }
       if (user.status === 409) {
-        alert("Email or username already exists");
+        setError("Email or username already exists.");
       }
     }
   };
 
   return (
     <div className="flex items-center justify-center">
-      <div className='flex mx-5 h-screen items-center justify-center min-w-fit mt-0 sm:w-1/4 flex-col my-8'>
+      <div className='flex sm:w-3/5 lg:w-1/4 overflow-scroll mx-5 sm:mx-10 h-screen items-center justify-center w-full mt-0 flex-col'>
         <h1 className='text-3xl sm:text-4xl mb-5 text-slate-700 text-center font-semibold'>Sign Up</h1>
-        <form onSubmit={handleSubmit} method="POST" className="w-full">
+        <form onSubmit={handleSubmit} method="POST" className="min-w-full">
           <label
             htmlFor="username"
             className="block my-2 text-base font-medium leading-6 text-slate-700"
           >
             Username:
+          </label>
             <input
               className="mt-1 px-3 py-5 block min-w-full placeholder-gray-500 placeholder-opacity-50 border-b-2 shadow-sm border-sky-600"
               type="text"
@@ -72,7 +81,6 @@ export default function SignUpForm() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-          </label>
           <label
             htmlFor="name"
             className="block my-2 text-base font-medium leading-6 text-slate-700"
@@ -112,6 +120,7 @@ export default function SignUpForm() {
               className="mt-1 px-3 py-5 block min-w-full placeholder-gray-500 placeholder-opacity-50 border-b-2 shadow-sm border-sky-600"
             />
           </label>
+          {error && <p className="text-red-500">{error}</p>}
           <button
             type="submit"
             className='mt-10 px-3 py-5 block min-w-full shadow-sm m1-1 font-medium text-white bg-sky-600 hover:bg-sky-900'
@@ -135,7 +144,7 @@ export default function SignUpForm() {
         </ Link>
       </div>
 
-      <div className='h-screen sm:w-3/4 overflow-hidden hidden sm:flex'>
+      <div className='h-screen sm:w-3/5 lg:w-3/4 overflow-hidden hidden sm:flex'>
         <Image
           src="/images/side-photo-6.jpg"
           width={1700}

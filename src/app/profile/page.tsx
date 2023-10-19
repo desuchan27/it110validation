@@ -4,7 +4,7 @@ import React from 'react'
 const Profile = () => {
   return (
     <div className='flex items-center justify-center'>
-      <div className='flex mx-5 h-screen my-5 items-center justify-center min-w-fit mt-0 sm:w-1/4 flex-col'>
+      <div className='flex mx-5 h-screen items-center justify-center min-w-fit mt-0 sm:w-1/4 flex-col'>
         <h1 className='text-3xl sm:text-4xl mb-5 text-slate-700 text-center font-semibold'>Welcome! Have a nice day!</h1>
         <Link
           href="/"

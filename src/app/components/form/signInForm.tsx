@@ -10,15 +10,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 
-export default function SignInForm(e: { preventDefault: () => void; }) {
+export default function SignInForm() {
+  
   const FormSchema = z.object({
     email: z.string().min(1, 'Email is required').email('Invalid email'),
     password: z
-      .string()
-      .min(1, 'Password is required')
-      .min(8, 'Password must have than 8 characters'),
+    .string()
+    .min(1, 'Password is required')
+    .min(8, 'Password must have than 8 characters'),
   });
-
+  
   const { register, handleSubmit } = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -26,10 +27,10 @@ export default function SignInForm(e: { preventDefault: () => void; }) {
       password: '',
     },
   });
-
+  
   const [error, setError] = useState('');
   const router = useRouter();
-
+  
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     try {
       const signInData = await signIn("credentials", {
@@ -51,8 +52,8 @@ export default function SignInForm(e: { preventDefault: () => void; }) {
 
   return (
     <div className='flex items-center justify-center'>
-        <div className='flex mx-5 h-screen my-5 items-center justify-center min-w-fit mt-0 sm:w-1/4 flex-col'>
-          <h1 className='text-3xl sm:text-4xl mb-5 text-slate-700 text-center font-semibold'>Log In</h1>
+        <div className='flex sm:w-3/5 lg:w-1/4 overflow-scroll mx-5 sm:mx-10 h-screen items-center justify-center w-full mt-0 flex-col'>
+          <h1 className='sm:text-4xl mb-5 text-slate-700 text-center font-semibold'>Log In</h1>
           <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
             <label
               htmlFor='email'
@@ -97,7 +98,7 @@ export default function SignInForm(e: { preventDefault: () => void; }) {
               Homepage
             </ Link>
         </div>
-        <div className='h-screen sm:w-3/4 overflow-hidden hidden sm:flex'>
+        <div className='h-screen sm:w-3/5 lg:w-3/4 overflow-hidden hidden sm:flex'>
           <Image
             src="/images/side-photo-6.jpg"
             width={1700}
